@@ -1,7 +1,14 @@
+/*
+    Author:     Arunima Mittra
+    Net ID:     AXM170025
+    Course:     CS 3377.0W1 Spring 2020
+    Assignment: PA 02
+*/
+
 #include <stdio.h>  // c std i/o library
 #include <string.h> // c string librarys
 #include <iostream>
-#include <sstream>
+#include <sstream>  // string stream library to convert string to int
 #include <dirent.h> // library to enter directories
 
 using namespace std;
@@ -38,42 +45,20 @@ public:
         if (in.empty())
             return;
 
-        // countFiles(in.c_str(), 0);
-        stringstream result(popening(in, 1));
-        result >> file;
+        // File count
+        stringstream fileFinder(countFiles(in, 1));
+        fileFinder >> file;
+
+        // Directory count
+        stringstream dirFinder(countFiles(in, 2));
+        dirFinder >> directory;
+
+        // Byte count
+        stringstream byteFinder(countFiles(in, 3));
+        byteFinder >> byte;
     }
 
-    void countFiles(const char *rootPath, const int level)
-    {
-        char path[1000];
-        struct dirent *dp;
-        DIR *dir = opendir(rootPath);
-
-        if (!dir)
-        {
-            return;
-        }
-
-        directory++;
-
-        while ((dp = readdir(dir)) != NULL)
-        {
-            if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
-            {
-                file++;
-
-                strcpy(path, rootPath);
-                strcat(path, "/");
-                strcat(path, dp->d_name);
-
-                countFiles(path, level + 2);
-            }
-        }
-
-        closedir(dir);
-    }
-
-    string popening(string path, int option)
+    string countFiles(string path, int option)
     {
         string command = "ls -lR " + path;
         if (option == 1) // files
@@ -86,7 +71,7 @@ public:
         }
         else if (option == 3) // bytes
         {
-            command += " | egrep '^(d|-) | awk '{print $5}' | awk '{total += $0} END {print total}'";
+            command += " | egrep '^(d|-)' | awk '{print $5}' | awk '{total += $0} END {print total}'";
         }
 
         string data;
@@ -106,8 +91,10 @@ public:
         return data;
     }
 
-    void print()
+    void print(string path)
     {
+        addInput(path);
+
         printf("The number of files in %s is: %d\n", in.substr(in.find_last_of('/')).c_str(), file);
         printf("The number of directories in %s is: %d\n", in.substr(in.find_last_of('/')).c_str(), directory);
         printf("The number of bytes in %s is: %d\n", in.substr(in.find_last_of('/')).c_str(), byte);
@@ -119,9 +106,7 @@ public:
 int main(int argc, char **argv)
 {
     filecnt f;
-
-    f.addInput(argv[1]);
-    f.print();
+    f.print(argv[1]);
 
     return 0;
 }
