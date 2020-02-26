@@ -95,9 +95,8 @@ public:
     {
         addInput(path);
 
-        printf("The number of files in %s is: %d\n", in.substr(in.find_last_of('/')).c_str(), file);
-        printf("The number of directories in %s is: %d\n", in.substr(in.find_last_of('/')).c_str(), directory);
-        printf("The number of bytes in %s is: %d\n", in.substr(in.find_last_of('/')).c_str(), byte);
+        
+        printf("%d %d %d", file, directory, byte);
     }
 };
 
