@@ -1,0 +1,10 @@
+CC		:= g++
+
+filecnt: filecnt.o version.h version.cpp
+	$(CC) -o filecnt filecnt.o version.cpp
+
+filedisp: filedisp.o
+	$(CC) -o filedisp filedisp.o
+
+clearall:
+	$(RM) filecnt filedisp *.o
